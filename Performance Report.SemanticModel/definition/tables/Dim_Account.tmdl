@@ -1,0 +1,106 @@
+table Dim_Account
+	lineageTag: 13f7a4a5-8e5f-43d1-b37d-255569c5a19d
+
+	column country_code
+		dataType: string
+		lineageTag: dbdb3ed7-1098-4c20-801a-3009d203e627
+		summarizeBy: none
+		sourceColumn: country_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column Account
+		dataType: string
+		lineageTag: a1a797ef-016a-4dce-b193-e4a25af8e013
+		summarizeBy: none
+		sourceColumn: Account
+
+		annotation SummarizationSetBy = Automatic
+
+	column Master_id
+		dataType: int64
+		formatString: 0
+		lineageTag: a0cd256d-93de-4ca0-8276-82878a01ee77
+		summarizeBy: sum
+		sourceColumn: Master_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Account_id
+		dataType: string
+		lineageTag: eed03dfc-c06f-42cc-a122-6d0b119ea1fc
+		summarizeBy: none
+		sourceColumn: Account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		lineageTag: 5b5cd89f-e7ce-4dfa-ace6-f312ac4c8a04
+		summarizeBy: sum
+		sourceColumn: latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column longitude
+		dataType: double
+		lineageTag: c94c0e05-94d5-4445-a1e3-7da1ae71fa43
+		summarizeBy: sum
+		sourceColumn: longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column country
+		dataType: string
+		lineageTag: 02194c81-1acf-44bd-80dc-55623b76de0a
+		summarizeBy: none
+		sourceColumn: country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Postal_code
+		dataType: string
+		lineageTag: 06ba178f-d070-4fb2-b123-4f7251cd807d
+		summarizeBy: none
+		sourceColumn: Postal_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column street_name
+		dataType: string
+		lineageTag: 4ef175be-4357-4a69-b049-86b9085f8a9a
+		summarizeBy: none
+		sourceColumn: street_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Street_number
+		dataType: int64
+		formatString: 0
+		lineageTag: a49291eb-4200-49a8-b6ee-60e717f664d9
+		summarizeBy: sum
+		sourceColumn: Street_number
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Account = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\PC\OneDrive\Desktop\Plant_DTS.xls"), null, true),
+				    Accounts1 = Source{[Name="Accounts"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Accounts1, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"country_code", type text}, {"Account", type text}, {"Master_id", Int64.Type}, {"Account_id", type text}, {"latitude2", type number}, {"longitude", type number}, {"country2", type text}, {"Postal_code", type text}, {"street_name", type text}, {"Street_number", Int64.Type}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Changed Type", {"Account_id"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"latitude2", "latitude"}, {"country2", "country"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

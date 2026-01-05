@@ -1,0 +1,22 @@
+table Slc_Values
+	lineageTag: f395ba1c-c0fd-463c-8dc8-058c23a2a8a6
+
+	column Values
+		dataType: string
+		lineageTag: e789b779-d2ec-4e89-a957-85ebc444e282
+		summarizeBy: none
+		sourceColumn: Values
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Slc_Values = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WCk7MSS1WitWJVnIvyi8uVggoyk/LLAELBJYm5pVkllQqxcYCAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Values = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Values", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

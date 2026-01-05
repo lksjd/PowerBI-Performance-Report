@@ -1,0 +1,40 @@
+table Dim_Date
+	lineageTag: 14941728-9f87-411f-ad1c-f04bd461b653
+
+	column Date
+		formatString: General Date
+		lineageTag: 385620cf-da46-4f6a-80e2-f9f1da7dc9f2
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: 1b6122ee-4dd1-4929-b7b6-454118110cb2
+			defaultHierarchy: LocalDateTable_c2a38904-8bc4-4a0f-99bb-6db6cbc18932.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Inpast =
+			
+			VAR lastsalesdate = MAX(Fact_Sales[Date_Time])
+			VAR lastsalesdatePY = EDATE(lastsalesdate,-12)
+			RETURN
+			Dim_Date[Date] <= lastsalesdatePY
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3b2dca64-3836-4111-b584-cc116db62b8e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Date = calculated
+		mode: import
+		source =
+				
+				CALENDAR(
+				    DATE(2022,01,01),
+				    DATE(2024,12,31)
+				)
+
+	annotation PBI_Id = 848877938d66408da9059144cc25890d
+

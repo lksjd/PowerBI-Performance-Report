@@ -1,0 +1,19 @@
+relationship AutoDetected_eb14919d-49d9-4825-b6da-9681ce1b03d1
+	fromColumn: Fact_Sales.Product_id
+	toColumn: Dim_Product.Product_Name_id
+
+relationship 1b6122ee-4dd1-4929-b7b6-454118110cb2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Date.Date
+	toColumn: LocalDateTable_c2a38904-8bc4-4a0f-99bb-6db6cbc18932.Date
+
+relationship dab9448e-2f31-607b-1935-5d8a6c2f4873
+	crossFilteringBehavior: bothDirections
+	toCardinality: many
+	fromColumn: Dim_Account.Account_id
+	toColumn: Fact_Sales.Account_id
+
+relationship 80371af7-af41-e4bb-6ff9-89b758207752
+	fromColumn: Fact_Sales.Date_Time
+	toColumn: Dim_Date.Date
+
